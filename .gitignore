@@ -1,0 +1,16 @@
+# Binaries
+tiktok-live-go
+app
+bin/
+ffmpeg_dir/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker
+.dockerignore
+
+# Go
+vendor/
+*.log
