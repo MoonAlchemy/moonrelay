@@ -7,7 +7,7 @@ Made with The help of Antigravity, Might rewrite it fully later on.
 
 - **Efficient**: Uses FFmpeg `-c copy` to pass through streams without re-encoding, ensuring minimal resource usage.
 - **Auto-Recovery**: Automatically detects when a user goes live and restarts the stream if it drops.
-- **Easy to Use**: Just set the username, mode,rtmp URL... , and it handles the rest.
+- **Easy to Use**: Just set the username, mode, rtmp URL... , and it handles the rest.
 
 ## Prerequisites
 
