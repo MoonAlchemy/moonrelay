@@ -1,12 +1,13 @@
 # Moonrelay
 
 A lightweight and efficient TikTok Live restreamer and archiver.
+Made with The help of Antigravity, Might rewrite it fully later on.
 
-## Features
+## Features(wip)
 
-- **Efficient**: Uses `-c copy` to pass through streams without re-encoding, ensuring minimal resource usage.
+- **Efficient**: Uses FFmpeg `-c copy` to pass through streams without re-encoding, ensuring minimal resource usage.
 - **Auto-Recovery**: Automatically detects when a user goes live and restarts the stream if it drops.
-- **Easy to Use**: Just set the username and mode, and it handles the rest.
+- **Easy to Use**: Just set the username, mode,rtmp URL... , and it handles the rest.
 
 ## Prerequisites
 
