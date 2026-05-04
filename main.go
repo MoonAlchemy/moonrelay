@@ -196,6 +196,7 @@ func startFFmpeg(mode, url, rtmpUrl, rtmpKey, user string) error {
 			"-c:v", "copy",
 			"-c:a", "aac",
 			"-b:a", "128k",
+			"-bufsize", "5000k",
 			"-f", "flv",
 			fullRtmpUrl,
 		}
