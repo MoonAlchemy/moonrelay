@@ -193,7 +193,9 @@ func startFFmpeg(mode, url, rtmpUrl, rtmpKey, user string) error {
 		args = []string{
 			"-hide_banner", "-loglevel", "info",
 			"-i", url,
-			"-c", "copy",
+			"-c:v", "copy",
+			"-c:a", "aac",
+			"-b:a", "128k",
 			"-f", "flv",
 			fullRtmpUrl,
 		}
