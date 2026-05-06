@@ -7,8 +7,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/moby/moby/api/types/container"
-	"github.com/moby/moby/client"
+	"encoding/json"
+	"net"
+	"net/http"
 
 	tele "gopkg.in/telebot.v4"
 )
@@ -66,24 +67,43 @@ func StartBot() {
 }
 
 func StopStream() error {
-	cli, err := client.NewClientWithOpts(client.FromEnv)
+	client := &http.Client{
+		Transport: &http.Transport{
+			DialContext: func(ctx context.Context, _, _ string) (net.Conn, error) {
+				return net.Dial("unix", "/var/run/docker.sock")
+			},
+		},
+	}
+	req, err := http.NewRequest("POST", "http://localhost/containers/moonrelay/stop", nil)
 	if err != nil {
 		return err
 	}
-	defer cli.Close()
-	return cli.ContainerStop(context.Background(), "moonrelay", container.StopOptions{})
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	return nil
 }
 
 func Status() (string, error) {
-	cli, err := client.NewClientWithOpts(client.FromEnv)
+	client := &http.Client{
+		Transport: &http.Transport{
+			DialContext: func(ctx context.Context, _, _ string) (net.Conn, error) {
+				return net.Dial("unix", "/var/run/docker.sock")
+			},
+		},
+	}
+	resp, err := client.Get("http://localhost/containers/moonrelay/json")
 	if err != nil {
 		return "", err
 	}
-	defer cli.Close()
-
-	info, err := cli.ContainerInspect(context.Background(), "moonrelay")
-	if err != nil {
-		return "", err
+	defer resp.Body.Close()
+	var result struct {
+		State struct {
+			Status string `json:"Status"`
+		} `json:"State"`
 	}
-	return info.State.Status, nil
+	json.NewDecoder(resp.Body).Decode(&result)
+	return result.State.Status, nil
 }
