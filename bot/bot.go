@@ -1,11 +1,14 @@
 package bot
 
 import (
+	"context"
 	"log"
 	"os"
-	"os/exec"
 	"strconv"
 	"time"
+
+	"github.com/moby/moby/api/types/container"
+	"github.com/moby/moby/client"
 
 	tele "gopkg.in/telebot.v4"
 )
@@ -63,15 +66,24 @@ func StartBot() {
 }
 
 func StopStream() error {
-	cmd := exec.Command("docker", "compose", "down")
-	return cmd.Run()
+	cli, err := client.NewClientWithOpts(client.FromEnv)
+	if err != nil {
+		return err
+	}
+	defer cli.Close()
+	return cli.ContainerStop(context.Background(), "moonrelay", container.StopOptions{})
 }
 
 func Status() (string, error) {
-	cmd := exec.Command("docker", "ps", "--filter", "name=moonrelay", "--format", "{{.Status}}")
-	out, err := cmd.Output()
+	cli, err := client.NewClientWithOpts(client.FromEnv)
 	if err != nil {
 		return "", err
 	}
-	return string(out), nil
+	defer cli.Close()
+
+	info, err := cli.ContainerInspect(context.Background(), "moonrelay")
+	if err != nil {
+		return "", err
+	}
+	return info.State.Status, nil
 }
