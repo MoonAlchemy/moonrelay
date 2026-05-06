@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"moonrelay/bot"
 	"net/http"
 	"os"
 	"os/exec"
@@ -285,5 +286,6 @@ func main() {
 	appLog.Printf("TikTok Live Restreamer and Archiver initialized for @%s [Mode: %s]", user, *mode)
 
 	// Enter the infinite loop
+	bot.StartBot()
 	loopStream(user, *mode, *rtmpUrl, *rtmpKey)
 }
